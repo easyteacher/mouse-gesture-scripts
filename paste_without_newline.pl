@@ -32,6 +32,7 @@ my $text = `xclip -selection clipboard -t text/plain -o 2>/dev/null`;
 if (!length $text) {
     exit();
 }
+$text =~ s/\\u(....)/ pack 'U*', hex($1) /eg;
 $text =~ s/(?<=[a-zA-Z])[\r\n]+(?=[a-zA-Z])/ /g;
 $text =~ s/[\r\n]//g;
 $text =~ s/(?<![a-zA-Z])\s+(?![a-zA-Z])//g;
