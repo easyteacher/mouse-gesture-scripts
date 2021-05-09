@@ -1,5 +1,6 @@
 #!/usr/bin/env perl
 use utf8;
+use Unicode::String qw(uhex);
 use open ':std', ':encoding(UTF-8)';
 
 sub SignReplacer {
@@ -36,8 +37,8 @@ $text =~ s/\\u(....)/ pack 'U*', hex($1) /eg;
 $text =~ s/(?<=[a-zA-Z])[\r\n]+(?=[a-zA-Z])/ /g;
 $text =~ s/[\r\n]//g;
 $text =~ s/(?<![a-zA-Z])\s+(?![a-zA-Z])//g;
-$text =~ s{(?<![a-zA-Z\s])(\,|\.|\!|\?|;|:|\(|\))}{SignReplacer($1)}eg;
-$text =~ s{(.)}{FullWidthReplacer($1)}seg;
+$text =~ s/(?<![a-zA-Z\s])(\,|\.|\!|\?|;|:|\(|\))/ SignReplacer($1) /eg;
+$text =~ s/(.)/ FullWidthReplacer($1) /seg;
 
 system "echo '$text' | xclip -selection clipboard";
 system "xdotool key ctrl+v";
